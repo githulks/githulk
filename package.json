@@ -1,6 +1,6 @@
 {
   "name": "githulk",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Small but powerful Github client",
   "main": "index.js",
   "scripts": {
@@ -18,6 +18,6 @@
   "license": "MIT",
   "dependencies": {
     "mana": "0.1.x",
-    "debug": "~0.7.4"
+    "debug": "0.7.x"
   }
 }
