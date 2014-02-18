@@ -67,6 +67,11 @@ mana.extend({
         return { user: result[1], repo: result[2] };
       }
     } else if ('object' === type) {
+      //
+      // The structure already exists, assume a pre-parsed object.
+      //
+      if ('user' in data && 'repo' in data) return data;
+
       result = this.url(data.repository, 'github')
         || this.url(data.homepage, 'github')
         || this.url(data.issues, 'github')
