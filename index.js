@@ -59,12 +59,15 @@ mana.extend({
     // github URL or a simple path structure.
     //
     if ('string' === type) {
+      data = data.replace('.git', '');
+
       if (
            (result = http.exec(data))
         || (result = githubio.exec(data))
-        || ((result = data.split('/')) && result.length === 2)
       ) {
         return { user: result[1], repo: result[2] };
+      } else if ((result = data.split('/')) && result.length === 2) {
+        return { user: result[0], repo: result[1] };
       }
     } else if ('object' === type) {
       //
@@ -77,7 +80,7 @@ mana.extend({
         || this.url(data.issues, 'github')
         || this.url(data, 'github');
 
-      if (result) return project(result);
+      if (result) return project.call(this, result);
     }
 
     return { user: this.user };
