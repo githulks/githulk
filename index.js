@@ -3,6 +3,11 @@
 var debug = require('debug')('githulk')
   , mana = require('mana');
 
+/**
+ *
+ * @constructor
+ * @api public
+ */
 mana.extend({
   initialise: function initalise(options) {
     options = options || {};
@@ -35,19 +40,62 @@ mana.extend({
   },
 
   /**
-   * parse github information out of given string.
+   * Parse out github information from a given string or object. For the object
+   * we assume that we're given an object with repository information as seen in
+   * your package.json
    *
-   * @param {String} info The project information.
+   * @param {String|Object} data The information that needs to be parsed.
    * @returns {Object}
    * @api public
    */
-  project: function project(info) {
-    info = info.split('/');
+  project: function project(data) {
+    var http = /github.com[\/|:]([^\/]+)\/([^\/]+)[.git|\/]?$/gi
+      , githubio = /https?:\/\/(.*)\.github\.io\/([^\/]+)\/?/gi
+      , type = this.type(data)
+      , result;
 
-    return {
-      user: info[0] || this.user,
-      repo: info[1]
-    };
+    //
+    // Try to extract github user name + repository information from a given
+    // github URL or a simple path structure.
+    //
+    if ('string' === type) {
+      if (
+           (result = http.exec(data))
+        || (result = githubio.exec(data))
+        || ((result = data.split('/')) && result.length === 2)
+      ) {
+        return { user: result[1], repo: result[2] };
+      }
+    } else if ('object' === type) {
+      result = this.url(data.repository, 'github')
+        || this.url(data.homepage, 'github')
+        || this.url(data.issues, 'github')
+        || this.url(data, 'github');
+
+      if (result) return project(result);
+    }
+
+    return { user: this.user };
+  },
+
+  /**
+   * Find an URL in a given data structure.
+   *
+   * @param {Object} data Data structure
+   * @param {String} contains String to contain.
+   * @returns {String}
+   * @api private
+   */
+  url: function url(data, contains) {
+    if (!data) return undefined;
+
+    if ('string' === typeof data && ~data.indexOf(contains)) return data;
+    if ('object' === typeof data && !Array.isArray(data)) {
+      if ('url' in data) return url(data.url, contains);
+      if ('web' in data) return url(data.web, contains);
+    }
+
+    return undefined;
   },
 
   /**
