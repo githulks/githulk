@@ -48,63 +48,7 @@ mana.extend({
    * @returns {Object}
    * @api public
    */
-  project: function project(data) {
-    var http = /github.com[\/|:]([^\/]+)\/([^\/]+)[.git|\/]?$/gi
-      , githubio = /https?:\/\/(.*)\.github\.io\/([^\/]+)\/?/gi
-      , type = this.type(data)
-      , result;
-
-    //
-    // Try to extract github user name + repository information from a given
-    // github URL or a simple path structure.
-    //
-    if ('string' === type) {
-      data = data.replace('.git', '');
-
-      if (
-           (result = http.exec(data))
-        || (result = githubio.exec(data))
-      ) {
-        return { user: result[1], repo: result[2] };
-      } else if ((result = data.split('/')) && result.length === 2) {
-        return { user: result[0], repo: result[1] };
-      }
-    } else if ('object' === type) {
-      //
-      // The structure already exists, assume a pre-parsed object.
-      //
-      if ('user' in data && 'repo' in data) return data;
-
-      result = this.url(data.repository, 'github')
-        || this.url(data.homepage, 'github')
-        || this.url(data.issues, 'github')
-        || this.url(data, 'github');
-
-      if (result) return project.call(this, result);
-    }
-
-    return { user: this.user };
-  },
-
-  /**
-   * Find an URL in a given data structure.
-   *
-   * @param {Object} data Data structure
-   * @param {String} contains String to contain.
-   * @returns {String}
-   * @api private
-   */
-  url: function url(data, contains) {
-    if (!data) return undefined;
-
-    if ('string' === typeof data && ~data.indexOf(contains)) return data;
-    if ('object' === typeof data && !Array.isArray(data)) {
-      if ('url' in data) return url(data.url, contains);
-      if ('web' in data) return url(data.web, contains);
-    }
-
-    return undefined;
-  },
+  project: require('extract-github'),
 
   /**
    * Return the correct Accept headers for a given content type.
