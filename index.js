@@ -4,6 +4,7 @@ var debug = require('debug')('githulk')
   , mana = require('mana');
 
 /**
+ * GitHulk smash API.
  *
  * @constructor
  * @api public
@@ -36,6 +37,14 @@ mana.extend({
       this.authorization = 'Basic '+ new Buffer(
         options.user +':'+ options.password
       ).toString('base64');
+    }
+
+    //
+    // No user / password, no predefined authorization, so maybe we've received
+    // an oauth token.
+    //
+    if (!this.authorization && options.token) {
+      this.authorization = 'token '+ options.token;
     }
   },
 
