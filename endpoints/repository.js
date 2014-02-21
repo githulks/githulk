@@ -65,26 +65,30 @@ Repository.prototype.raw = function raw(args) {
  * @returns {Assign}
  * @api public
  */
-Repository.prototype.content = function contents(args) {
+Repository.prototype.contents = function contents(args) {
   args = this.api.args(arguments);
 
   var project = this.api.project(args.str)
     , options = args.options || {};
 
-  options.headers = options.headers || {};
-  options.headers.Accept = options.headers.Accept || 'text/plain';
   options.path = 'contents/'+ (options.path || '');
 
   return this.send(
-    ['repo', project.user, project.repo, options.path],
+    ['repos', project.user, project.repo, options.path],
     options,
     args.fn
   );
 };
 
 /**
- * Check if a given github repository has been moved, and if it's moved give the
- * new github location of this repository.
+ * It's possible that a user has moved the repository to a new location.
+ * Github automatically redirects you when you access the old page. But it
+ * doesn't provide any redirection for API calls causing them to fail with
+ * 404's.
+ *
+ * In order to detect the correct repository location we need to do a HEAD
+ * check of the public github URL and use the location header as source URL
+ * when we're presented with a 301 status code.
  *
  * @param {String} project The project details.
  * @param {Function} fn The Callback.
@@ -103,7 +107,7 @@ Repository.prototype.moved = function moved(args) {
   }, function gothead(err, data) {
     if (err) return args.fn(err);
 
-    var parsed = api.project(data.res.request.href)
+    var parsed = api.project(data[0].res.request.href)
       , changed = parsed.user !== project.user
         || parsed.repo !== project.repo;
 
