@@ -61,6 +61,9 @@ Repository.prototype.raw = function raw(args) {
  *
  * @param {String} project The project details.
  * @param {Object} options Optional options.
+ * @param {Function} fn The Callback.
+ * @returns {Assign}
+ * @api public
  */
 Repository.prototype.content = function contents(args) {
   args = this.api.args(arguments);
@@ -77,6 +80,35 @@ Repository.prototype.content = function contents(args) {
     options,
     args.fn
   );
+};
+
+/**
+ * Check if a given github repository has been moved, and if it's moved give the
+ * new github location of this repository.
+ *
+ * @param {String} project The project details.
+ * @param {Function} fn The Callback.
+ * @returns {Assign}
+ * @api public
+ */
+Repository.prototype.moved = function moved(args) {
+  args = this.api.args(arguments);
+
+  var project = this.api.project(args.str)
+    , api = this.api;
+
+  return this.send([project.user, project.repo], {
+    api: 'https://github.com/',
+    method: 'HEAD'
+  }, function gothead(err, data) {
+    if (err) return args.fn(err);
+
+    var parsed = api.project(data.res.request.href)
+      , changed = parsed.user !== project.user
+        || parsed.repo !== project.repo;
+
+    args.fn(undefined, parsed, changed);
+  });
 };
 
 //
