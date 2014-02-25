@@ -18,6 +18,7 @@ mana.extend({
     options.mindelay = 'mindelay' in options ? options.mindelay : 100;
     options.retries = 'retries' in options ? options.retries : 3;
     options.factor = 'factor' in options ? options.factor : 2;
+    options.cache = 'cache' in options ? options.cache : null;
 
     this.authorization = options.authorization;
     this.mindelay = options.mindelay;
@@ -41,11 +42,18 @@ mana.extend({
 
     //
     // No user / password, no predefined authorization, so maybe we've received
-    // an oauth token.
+    // an OAuth token.
     //
     if (!this.authorization && options.token) {
       this.authorization = 'token '+ options.token;
     }
+
+    //
+    // We want to use a cache engine for the optimizing our responses. This
+    // makes us use conditional requests for the Github API making it easier to
+    // stay within your API rate limit.
+    //
+    if (options.cache) this.cache = options.cache;
   },
 
   /**
