@@ -44,8 +44,9 @@ mana.extend({
     // No user / password, no predefined authorization, so maybe we've received
     // an OAuth token.
     //
-    if (!this.authorization && options.token) {
-      this.authorization = 'token '+ options.token;
+    var token = options.token || process.env.GITHUB_TOKEN || process.env.GITHULK_TOKEN;
+    if (!this.authorization && token) {
+      this.authorization = 'token '+ token;
     }
 
     //
