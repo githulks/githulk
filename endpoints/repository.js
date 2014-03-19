@@ -14,6 +14,28 @@ function Repository(api) {
  * @returns {Assign}
  * @api public
  */
+Repository.prototype.get = function get(args) {
+  args = this.api.args(arguments);
+
+  var project = this.api.project(args.str)
+    , options = args.options || {};
+
+  return this.send(
+    ['repos', project.user, project.repo],
+    options,
+    args.fn
+  );
+};
+
+/**
+ * Get the README contents of an project.
+ *
+ * @param {String} project The project details.
+ * @param {Object} options Optional options.
+ * @param {function} fn The callback
+ * @returns {Assign}
+ * @api public
+ */
 Repository.prototype.readme = function readme(args) {
   args = this.api.args(arguments);
 
