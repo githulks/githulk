@@ -19,6 +19,7 @@ mana.extend({
     options.retries = 'retries' in options ? options.retries : 3;
     options.factor = 'factor' in options ? options.factor : 2;
     options.cache = 'cache' in options ? options.cache : null;
+    options.tokens = 'tokens' in options ? options.tokens : [];
 
     this.authorization = options.authorization;
     this.mindelay = options.mindelay;
@@ -26,6 +27,7 @@ mana.extend({
     this.mirrors = options.mirrors;
     this.retries = options.retries;
     this.factor = options.factor;
+    this.tokens = options.tokens;
     this.user = options.user;
     this.api = options.url;
 
@@ -45,8 +47,13 @@ mana.extend({
     // an OAuth token.
     //
     var token = options.token || process.env.GITHUB_TOKEN || process.env.GITHULK_TOKEN;
+
     if (!this.authorization && token) {
-      this.authorization = 'token '+ token;
+      if (this.tokens.length && !~this.tokens.indexOf(token)) {
+        this.tokens.unshift(token);
+      } else {
+        this.authorization = 'token '+ token;
+      }
     }
 
     //
