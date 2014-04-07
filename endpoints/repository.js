@@ -1,5 +1,11 @@
 'use strict';
 
+/**
+ * Repositories API endpoint.
+ *
+ * @param {Mana} api The actual API instance.
+ * @api private
+ */
 function Repository(api) {
   this.send = api.send.bind(api);
   this.api = api;
@@ -10,19 +16,18 @@ function Repository(api) {
  *
  * @param {String} project The project details.
  * @param {Object} options Optional options.
- * @param {function} fn The callback
+ * @param {function} fn The callback.
  * @returns {Assign}
  * @api public
  */
 Repository.prototype.get = function get(args) {
   args = this.api.args(arguments);
 
-  var project = this.api.project(args.str)
-    , options = args.options || {};
+  var project = this.api.project(args.str);
 
   return this.send(
     ['repos', project.user, project.repo],
-    options,
+    args.options || {},
     args.fn
   );
 };
@@ -32,7 +37,7 @@ Repository.prototype.get = function get(args) {
  *
  * @param {String} project The project details.
  * @param {Object} options Optional options.
- * @param {function} fn The callback
+ * @param {function} fn The callback.
  * @returns {Assign}
  * @api public
  */
@@ -138,6 +143,6 @@ Repository.prototype.moved = function moved(args) {
 };
 
 //
-// Expose the repository API
+// Expose the repository API.
 //
 module.exports = Repository;
