@@ -8,6 +8,7 @@
  */
 function Issues(api) {
   this.send = api.send.bind(api);
+  this.qs = api.querystringify;
   this.api = api;
 }
 
@@ -21,9 +22,18 @@ function Issues(api) {
 Issues.prototype.get = function get(args) {
   args = this.api.args(arguments);
 
+  var options = args.options || {};
+
   return this.send(
-    ['issues'],
-    args.options || {},
+    ['issues', this.qs(options, [
+      'filter',     // Filter issues.
+      'state',      // Issue state.
+      'lables',     // Contains these labels.
+      'sort',       // Sort on.
+      'direction',  // Sort direction
+      'since'       // Issues created since
+    ])],
+    options,
     args.fn
   );
 };
@@ -40,9 +50,18 @@ Issues.prototype.get = function get(args) {
 Issues.prototype.user = function user(args) {
   args = this.api.args(arguments);
 
+  var options = args.options || {};
+
   return this.send(
-    ['user', 'issues'],
-    args.options || {},
+    ['user', 'issues', this.qs(options, [
+      'filter',     // Filter issues.
+      'state',      // Issue state.
+      'lables',     // Contains these labels.
+      'sort',       // Sort on.
+      'direction',  // Sort direction
+      'since'       // Issues created since
+    ])],
+    options,
     args.fn
   );
 };
@@ -59,9 +78,18 @@ Issues.prototype.user = function user(args) {
 Issues.prototype.organization = function organization(args) {
   args = this.api.args(arguments);
 
+  var options = args.options || {};
+
   return this.send(
-    ['orgs', args.string, 'issues'],
-    args.options || {},
+    ['orgs', args.string, 'issues', this.qs(options, [
+      'filter',     // Filter issues.
+      'state',      // Issue state.
+      'lables',     // Contains these labels.
+      'sort',       // Sort on.
+      'direction',  // Sort direction.
+      'since'       // Issues created since.
+    ])],
+    options,
     args.fn
   );
 };
@@ -78,11 +106,22 @@ Issues.prototype.organization = function organization(args) {
 Issues.prototype.repository = function repository(args) {
   args = this.api.args(arguments);
 
-  var project = this.api.project(args.str);
+  var project = this.api.project(args.str)
+    , options = args.options || {};
 
   return this.send(
-    ['repos', project.user, project.repo, 'issues'],
-    args.options || {},
+    ['repos', project.user, project.repo, 'issues', this.qs(options, [
+      'milestone',  // List issues for milestone>
+      'state',      // Issue state.
+      'assignee',   // Assigned to which user.
+      'creator',    // Created by which user.
+      'mentioned',  // Mentions user.
+      'lables',     // Has labels
+      'sort',       // Sort on.
+      'direction',  // Sort direction.
+      'since'       // Issues created since.
+    ])],
+    options,
     args.fn
   );
 };
@@ -100,11 +139,12 @@ Issues.prototype.repository = function repository(args) {
 Issues.prototype.issue = function issue(args) {
   args = this.api.args(arguments);
 
-  var project = this.api.project(args.str);
+  var project = this.api.project(args.str)
+    , options = args.options || {};
 
   return this.send(
     ['repos', project.user, project.repo, 'issues', args.number],
-    args.options || {},
+    options,
     args.fn
   );
 };
@@ -122,11 +162,18 @@ Issues.prototype.issue = function issue(args) {
 Issues.prototype.create = function create(args) {
   args = this.api.args(arguments);
 
-  var project = this.api.project(args.str);
+  var project = this.api.project(args.str)
+    , options = args.options || {};
 
   return this.send(
-    ['repos', project.user, project.repo, 'issues', args.number],
-    this.api.merge(args.options || {}, {
+    ['repos', project.user, project.repo, 'issues', args.number, this.qs(options, [
+      'title',      // Required: Title of the issue.
+      'body',       // Issue content.
+      'assignee',   // Assigned user.
+      'milestone',  // Milestone assigned.
+      'labels'      // Labels to add.
+    ])],
+    this.api.merge(options, {
       method: 'POST'
     }),
     args.fn
@@ -146,11 +193,18 @@ Issues.prototype.create = function create(args) {
 Issues.prototype.edit = function edit(args) {
   args = this.api.args(arguments);
 
-  var project = this.api.project(args.str);
+  var project = this.api.project(args.str)
+    , options = args.options || {};
 
   return this.send(
-    ['repos', project.user, project.repo, 'issues', args.number],
-    this.api.merge(args.options || {}, {
+    ['repos', project.user, project.repo, 'issues', args.number, this.qs(options, [
+      'title',      // Title of the issue.
+      'body',       // Issue content.
+      'assignee',   // Assigned user.
+      'milestone',  // Milestone assigned.
+      'labels'      // Labels to add.
+    ])],
+    this.api.merge(options, {
       method: 'PATCH'
     }),
     args.fn
@@ -160,3 +214,4 @@ Issues.prototype.edit = function edit(args) {
 //
 // Expose the issues API.
 //
+module.exports = Issues;
