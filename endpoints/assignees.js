@@ -1,13 +1,13 @@
 'use strict';
 
 /**
+ * List available assignees.
  *
  * @param {Mana} api The actual API instance.
  * @api private
  */
 function Assignees(api) {
   this.send = api.send.bind(api);
-  this.qs = api.querystringify;
   this.api = api;
 }
 
