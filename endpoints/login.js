@@ -52,7 +52,18 @@ Login.prototype.authorize = function authorize(res, client, scopes, redirect) {
  * @api public
  */
 Login.prototype.callback = function callback(req, client, secret, state, fn) {
-  var data = url.parse(req.url, true).query;
+  var data = url.parse(req.url, true).query
+    , err;
+
+  if (data.error) {
+    err = new Error(data.error_description);
+    err.url = data.error_uri;
+    err.error = data.error;
+  } else if (!data.code) {
+    err = new Error('Missing OAuth code.');
+  }
+
+  if (err) return this.bail(fn, err);
 
   return this.send(
     ['login', 'oauth', 'access_token'],
