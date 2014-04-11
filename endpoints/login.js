@@ -10,8 +10,8 @@ var crypto = require('crypto')
  * @api private
  */
 function Login(api) {
+  this.qs = api.querystring.bind(api);
   this.send = api.send.bind(api);
-  this.qs = api.querystringify;
   this.api = api;
 }
 
@@ -25,17 +25,21 @@ function Login(api) {
  * @api public
  */
 Login.prototype.authorize = function authorize(res, client, scopes, redirect) {
-  var state = crypto.randomBytes(8).toString('hex');
+  var state = crypto.randomBytes(8).toString('hex')
+    , endpoint = 'https://github.com/login/oauth/authorize'+ this.qs({
+        scope: (Array.isArray(scopes) ? scopes : [scopes]).join(','),
+        redirect_url: redirect,
+        client_id: client,
+        state: state
+      }, ['client_id','scope', 'redirect_uri', 'state']);
 
-  res.statusCode = 302;
-  res.setHeader('Location', url.resolve(this.api.api, 'login/oauth/authorize'+ this.qs(
-    {
-      scope: (Array.isArray(scopes) ? scopes : [scopes]).join(','),
-      redirect_url: redirect,
-      client_id: client,
-      state: state
-  }, ['client_id','scope', 'redirect_uri', 'state']
-  )));
+  if (res.redirect) {
+    res.redirect(endpoint, 302);
+  } else {
+    res.setHeader('Location', endpoint);
+    res.statusCode = 302;
+    res.end('');
+  }
 
   return state;
 };
