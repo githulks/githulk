@@ -33,6 +33,12 @@ Login.prototype.authorize = function authorize(res, client, scopes, redirect) {
         state: state
       }, ['client_id','scope', 'redirect_uri', 'state']);
 
+  //
+  // Optionally set store the `state` in the session so we can re-use it for the
+  // callback.
+  //
+  if (res.session) res.session.oauth_state = state;
+
   if (res.redirect) {
     res.redirect(endpoint, 302);
   } else {
@@ -58,6 +64,11 @@ Login.prototype.authorize = function authorize(res, client, scopes, redirect) {
 Login.prototype.callback = function callback(req, client, secret, state, fn) {
   var data = url.parse(req.url, true).query
     , err;
+
+  if ('function' === typeof state && req.session) {
+    fn = state;
+    state = req.session.oauth_state;
+  }
 
   if (data.error) {
     err = new Error(data.error_description);
