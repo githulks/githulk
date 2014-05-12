@@ -1,6 +1,6 @@
 {
   "name": "githulk",
-  "version": "0.0.7",
+  "version": "0.1.0",
   "description": "Small but powerful Github client",
   "main": "index.js",
   "scripts": {
@@ -17,7 +17,7 @@
   "author": "Arnout Kazemier",
   "license": "MIT",
   "dependencies": {
-    "debug": "0.7.x",
+    "debug": "0.8.x",
     "extract-github": "0.0.x",
     "mana": "0.1.x"
   }
