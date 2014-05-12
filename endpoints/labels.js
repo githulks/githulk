@@ -20,7 +20,7 @@ function Labels(api) {
  * @param {Function} fn The callback.
  * @api public
  */
-Labels.prototype.get = function get(args) {
+Labels.prototype.list = function list(args) {
   args = this.api.args(arguments);
 
   var project = this.api.project(args.str)
@@ -41,7 +41,7 @@ Labels.prototype.get = function get(args) {
  * @param {Function} fn The callback.
  * @api public
  */
-Labels.prototype.label = function label(args) {
+Labels.prototype.get = function get(args) {
   args = this.api.args(arguments);
 
   var project = this.api.project(args.str)

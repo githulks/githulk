@@ -19,7 +19,7 @@ function Assignees(api) {
  * @param {Function} fn The callback.
  * @api public
  */
-Assignees.prototype.get = function get(args) {
+Assignees.prototype.list = function list(args) {
   args = this.api.args(arguments);
 
   var project = this.api.project(args.str)

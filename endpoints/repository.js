@@ -12,7 +12,28 @@ function Repository(api) {
 }
 
 /**
- * Get the README contents of an project.
+ * List all repositories for the given user.
+ *
+ * @param {String} project The project details.
+ * @param {Object} options Optional options.
+ * @param {function} fn The callback.
+ * @returns {Assign}
+ * @api public
+ */
+Repository.prototype.list = function list(args) {
+  args = this.api.args(arguments);
+
+  var project = this.api.project(args.str);
+
+  return this.send(
+    ['users', project ? project.user : args.str, 'repos'],
+    args.options || {},
+    args.fn
+  );
+};
+
+/**
+ * Get repository information for a given repo.
  *
  * @param {String} project The project details.
  * @param {Object} options Optional options.

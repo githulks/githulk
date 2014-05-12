@@ -19,7 +19,7 @@ function Issues(api) {
  * @param {Function} fn The callback.
  * @api public
  */
-Issues.prototype.get = function get(args) {
+Issues.prototype.list = function list(args) {
   args = this.api.args(arguments);
 
   var options = args.options || {};
