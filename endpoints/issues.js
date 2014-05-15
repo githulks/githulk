@@ -16,23 +16,25 @@ function Issues(api) {
  * Get all issues (repos, orgs etc), for the authenticated user.
  *
  * @param {Object} options Optional options.
- * @param {Function} fn The callback.
+ * @param {function} fn The callback.
+ * @returns {Assign}
  * @api public
  */
 Issues.prototype.list = function list(args) {
   args = this.api.args(arguments);
 
   var options = args.options || {};
+  options.params = [
+    'filter',     // Filter issues.
+    'state',      // Issue state.
+    'lables',     // Contains these labels.
+    'sort',       // Sort on.
+    'direction',  // Sort direction
+    'since'       // Issues created since
+  ];
 
   return this.send(
-    ['issues', this.qs(options, [
-      'filter',     // Filter issues.
-      'state',      // Issue state.
-      'lables',     // Contains these labels.
-      'sort',       // Sort on.
-      'direction',  // Sort direction
-      'since'       // Issues created since
-    ])],
+    ['issues'],
     options,
     args.fn
   );
