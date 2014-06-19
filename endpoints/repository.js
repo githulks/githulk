@@ -22,11 +22,30 @@ function Repository(api) {
  */
 Repository.prototype.list = function list(args) {
   args = this.api.args(arguments);
+  args.options = args.options || {};
 
   var project = this.api.project(args.str);
 
   return this.send(
-    ['users', project ? project.user : args.str, 'repos'],
+    [args.options.organization ? 'orgs' : 'users', project ? project.user : args.str, 'repos'],
+    args.options || {},
+    args.fn
+  );
+};
+
+/**
+ * List all the public repositories for the authorized user.
+ *
+ * @param {Object} options Optional options.
+ * @param {function} fn The callback.
+ * @returns {Assign}
+ * @api public
+ */
+Repository.prototype.public = function publics(args) {
+  args = this.api.args(arguments);
+
+  return this.send(
+    '/repositories',
     args.options || {},
     args.fn
   );
