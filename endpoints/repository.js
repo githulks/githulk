@@ -3,11 +3,13 @@
 /**
  * Repositories API endpoint.
  *
+ * @constructor
  * @param {Mana} api The actual API instance.
  * @api private
  */
 function Repository(api) {
   this.send = api.send.bind(api);
+  this.options = api.options;
   this.api = api;
 }
 
@@ -22,13 +24,15 @@ function Repository(api) {
  */
 Repository.prototype.list = function list(args) {
   args = this.api.args(arguments);
-  args.options = args.options || {};
+  args.options = this.options(args.options, [
+    'type', 'sort', 'direction'
+  ]);
 
   var project = this.api.project(args.str);
 
   return this.send(
     [args.options.organization ? 'orgs' : 'users', project ? project.user : args.str, 'repos'],
-    args.options || {},
+    args.options,
     args.fn
   );
 };
@@ -43,10 +47,13 @@ Repository.prototype.list = function list(args) {
  */
 Repository.prototype.public = function publics(args) {
   args = this.api.args(arguments);
+  args.options = this.options(args.options, [
+    'since'
+  ]);
 
   return this.send(
     '/repositories',
-    args.options || {},
+    args.options,
     args.fn
   );
 };
@@ -62,12 +69,13 @@ Repository.prototype.public = function publics(args) {
  */
 Repository.prototype.get = function get(args) {
   args = this.api.args(arguments);
+  args.options = this.options(args.options);
 
   var project = this.api.project(args.str);
 
   return this.send(
     ['repos', project.user, project.repo],
-    args.options || {},
+    args.options,
     args.fn
   );
 };
@@ -84,8 +92,8 @@ Repository.prototype.get = function get(args) {
 Repository.prototype.readme = function readme(args) {
   args = this.api.args(arguments);
 
-  var project = this.api.project(args.str)
-    , options = args.options || {};
+  var options = args.options = this.options(args.options, [ 'ref' ])
+    , project = this.api.project(args.str);
 
   options.headers = options.headers || {};
   options.headers.Accept = this.api.accepts(options.headers.Accept || 'html');
@@ -108,8 +116,8 @@ Repository.prototype.readme = function readme(args) {
 Repository.prototype.raw = function raw(args) {
   args = this.api.args(arguments);
 
-  var project = this.api.project(args.str)
-    , options = args.options || {};
+  var options = args.options = this.options(args.options)
+    , project = this.api.project(args.str);
 
   options.headers = options.headers || {};
   options.headers.Accept = options.headers.Accept || 'text/plain';
@@ -135,8 +143,8 @@ Repository.prototype.raw = function raw(args) {
 Repository.prototype.contents = function contents(args) {
   args = this.api.args(arguments);
 
-  var project = this.api.project(args.str)
-    , options = args.options || {};
+  var options = args.options = this.options(args.options, [ 'ref' ])
+    , project = this.api.project(args.str);
 
   options.path = 'contents/'+ (options.path || '');
 

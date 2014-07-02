@@ -49,11 +49,8 @@ mana.extend({
     var token = options.token || process.env.GITHUB_TOKEN || process.env.GITHULK_TOKEN;
 
     if (!this.authorization && token) {
-      if (this.tokens.length && !~this.tokens.indexOf(token)) {
-        this.tokens.unshift(token);
-      } else {
-        this.authorization = 'token '+ token;
-      }
+      if ('string' === typeof this.tokens) this.tokens = this.tokens.split(',');
+      this.tokens.unshift(token);
     }
 
     //
@@ -90,5 +87,32 @@ mana.extend({
     };
 
     return types[type] || types[type.toLowerCase()] || type;
+  },
+
+  /**
+   * Helper function to create some sane default options that we supply to the
+   * API.
+   *
+   * @param {Object} args Received optional options
+   * @param {Array|Object} params Optional params.
+   * @api private
+   */
+  options: function options(args, params) {
+    args = args || {};
+    args.params = args.params || params || [];
+
+    //
+    // Add some default values.
+    //
+    var defaults = { page: 1, per_page: 100 };
+    Object.keys(defaults).forEach(function each(key) {
+      if (Array.isArray(args.params)) {
+        if (!~args.params.indexOf(key)) args.params.push(key);
+      } else {
+        if (!(key in args.params)) args.params[key] = defaults[key];
+      }
+    });
+
+    return args;
   }
 }).drink(module);
