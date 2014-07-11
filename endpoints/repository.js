@@ -183,10 +183,12 @@ Repository.prototype.moved = function moved(args) {
     if (err) return args.fn(err);
 
     var parsed = api.project(data[0].res.request.href)
-      , changed = parsed.user !== project.user
-        || parsed.repo !== project.repo;
+      , changed;
 
-    args.fn(undefined, parsed, changed);
+    if (!parsed) changed = true;
+    else changed = parsed.user !== project.user || parsed.repo !== project.repo;
+
+    args.fn(undefined, parsed || project, changed);
   });
 };
 
