@@ -1,18 +1,18 @@
 'use strict';
 
 /**
- * User API endpoint.
+ * Organization API endpoint.
  *
  * @param {Mana} api The actual API instance.
  * @api private
  */
-function User(api) {
+function Organization(api) {
   this.send = api.send.bind(api);
   this.api = api;
 }
 
 /**
- * Get user information for a given username.
+ * Get organization information for a given org.
  *
  * @param {String} project The project details.
  * @param {Object} options Optional options.
@@ -20,26 +20,19 @@ function User(api) {
  * @returns {Assign}
  * @api public
  */
-User.prototype.get = function get(args) {
+Organization.prototype.get = function get(args) {
   args = this.api.args(arguments);
-
-  if (!args.str) return this.send(
-    ['user'],
-    args.options || {},
-    args.fn
-  );
-
   var project = this.api.project(args.str) || {};
 
   return this.send(
-    ['users', project.user || args.str],
+    ['orgs', project.user || args.str],
     args.options || {},
     args.fn
   );
 };
 
 /**
- * Get organization information for a given username.
+ * Get public member information for a given org.
  *
  * @param {String} project The project details.
  * @param {Object} options Optional options.
@@ -47,25 +40,18 @@ User.prototype.get = function get(args) {
  * @returns {Assign}
  * @api public
  */
-User.prototype.orgs = function get(args) {
+Organization.prototype.publicMembers = function publicMembers(args) {
   args = this.api.args(arguments);
-
-  if (!args.str) return this.send(
-    ['user', 'orgs'],
-    args.options || {},
-    args.fn
-  );
-
   var project = this.api.project(args.str) || {};
 
   return this.send(
-    ['users', project.user || args.str, 'orgs'],
+    ['orgs', project.user || args.str, 'public_members'],
     args.options || {},
     args.fn
   );
 };
 
 //
-// Expose the User API.
+// Expose the organization API.
 //
-module.exports = User;
+module.exports = Organization;
