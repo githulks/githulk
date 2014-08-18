@@ -111,7 +111,8 @@ Repository.prototype.readme = function readme(args) {
  * @param {String} project The project details.
  * @param {Object} options Optional options.
  * @param {Function} fn The Callback.
- * @api private
+ * @returns {Assign}
+ * @api public
  */
 Repository.prototype.raw = function raw(args) {
   args = this.api.args(arguments);
