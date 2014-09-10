@@ -1,6 +1,6 @@
 'use strict';
 
-var debug = require('debug')('githulk')
+var debug = require('diagnostics')('githulk')
   , mana = require('mana');
 
 /**
@@ -46,7 +46,10 @@ mana.extend({
     // No user / password, no predefined authorization, so maybe we've received
     // an OAuth token.
     //
-    var token = options.token || process.env.GITHUB_TOKEN || process.env.GITHULK_TOKEN;
+    var token = options.token
+      || process.env.GITHULK_TOKEN
+      || process.env.GITHULK
+      || process.env.GITHUB_TOKEN;
 
     if (!this.authorization && token) {
       if ('string' === typeof this.tokens) this.tokens = this.tokens.split(',');
@@ -95,6 +98,7 @@ mana.extend({
    *
    * @param {Object} args Received optional options
    * @param {Array|Object} params Optional params.
+   * @returns {Object} Args.
    * @api private
    */
   options: function options(args, params) {

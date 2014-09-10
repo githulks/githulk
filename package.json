@@ -4,7 +4,7 @@
   "description": "Small but powerful Github client",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "illuminati"
   },
   "repository": {
     "type": "git",
@@ -17,8 +17,13 @@
   "author": "Arnout Kazemier",
   "license": "MIT",
   "dependencies": {
-    "debug": "0.8.x",
+    "diagnostics": "0.0.x",
     "extract-github": "0.0.x",
     "mana": "0.1.x"
+  },
+  "devDependencies": {
+    "assume": "0.0.x",
+    "illuminati": "0.0.5",
+    "pre-commit": "0.0.x"
   }
 }
