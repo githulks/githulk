@@ -1,5 +1,7 @@
 'use strict';
 
+var debug = require('diagnostics')('githulk:user');
+
 /**
  * User API endpoint.
  *

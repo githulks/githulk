@@ -1,6 +1,7 @@
 'use strict';
 
-var crypto = require('crypto')
+var debug = require('diagnostics')('githulk:labels')
+  , crypto = require('crypto')
   , url = require('url');
 
 /**
