@@ -10,7 +10,6 @@ var debug = require('diagnostics')('githulk:issues');
  */
 function Issues(api) {
   this.send = api.send.bind(api);
-  this.qs = api.querystringify;
   this.api = api;
 }
 
