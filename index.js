@@ -43,6 +43,14 @@ mana.extend({
     }
 
     //
+    // Transform tokens in an array, strings are here as they can be more
+    // readable.
+    //
+    if ('string' === typeof this.tokens) {
+      this.tokens = this.tokens.split(',');
+    }
+
+    //
     // No user / password, no predefined authorization, so maybe we've received
     // an OAuth token.
     //
@@ -52,8 +60,7 @@ mana.extend({
       || process.env.GITHUB_TOKEN;
 
     if (!this.authorization && token) {
-      if ('string' === typeof this.tokens) this.tokens = this.tokens.split(',');
-      this.tokens.unshift(token);
+      this.tokens.push(token);
     }
 
     //
@@ -61,7 +68,9 @@ mana.extend({
     // makes us use conditional requests for the Github API making it easier to
     // stay within your API rate limit.
     //
-    if (options.cache) this.cache = options.cache;
+    if (options.cache) {
+      this.cache = options.cache;
+    }
   },
 
   /**
