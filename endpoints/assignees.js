@@ -49,7 +49,7 @@ Assignees.prototype.assignee = function assignee(args) {
     , options = args.options || {};
 
   return this.send(
-    ['repos', project.user, project.repo, options.assignee],
+    ['repos', project.user, project.repo, 'assignees', options.assignee],
     options,
     args.fn
   );
