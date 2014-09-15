@@ -64,7 +64,6 @@ Comments.prototype.repository = function repository(args) {
   );
 };
 
-
 /**
  * Get a single comment
  *
@@ -148,7 +147,7 @@ Comments.prototype.edit = function create(args) {
  * @returns {Assign}
  * @api public
  */
-Comments.prototype.edit = function create(args) {
+Comments.prototype.remove = function remove(args) {
   args = this.api.args(arguments);
 
   var project = this.api.project(args.str)
