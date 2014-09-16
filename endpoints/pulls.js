@@ -51,6 +51,8 @@ Pulls.create = [
  * @api public
  */
 Pulls.prototype.list = function list(args) {
+  args = this.api.args(arguments);
+
   var project = this.api.project(args.str)
     , options = args.options || {};
 
