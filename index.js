@@ -1,12 +1,28 @@
 'use strict';
 
 var debug = require('diagnostics')('githulk')
-  , mana = require('mana');
+  , mana = require('mana')
+  , url = require('url');
 
 /**
  * GitHulk smash API.
  *
+ * Options:
+ * - url: The location of the API.
+ * - maxdelay: Maximum delay for exponential back off.
+ * - mindelay: Minimum delay for exponential back off.
+ * - retries: The amount of retries we should before failing.
+ * - factor: Exponential back off factor.
+ * - cache: We need to use to store requests in so we can handle 304's and not
+ *   eat the API tokens.
+ * - tokens: Array of tokens we should use for these requests.
+ * - token: Single token we should use to connect. I added to the tokens array.
+ * - user: Username of your GitHub account (if you don't want to use tokens)
+ * - password: Password of your GitHub account (if you don't want to use tokens)
+ * - authorization: Custom authorization we should be using instead of tokens.
+ *
  * @constructor
+ * @param {Object} options GitHulk configuration
  * @api public
  */
 mana.extend({
@@ -127,5 +143,76 @@ mana.extend({
     });
 
     return args;
+  },
+
+  /**
+   * Parse Github link headers.
+   *
+   * @param {String} header The link header we need to parse.
+   * @returns {Object}
+   * @api public
+   */
+  link: function link(header) {
+    return header.split(',').reduce(function reduce(memo, part) {
+      var chunks = /<([^<]+)?>\;\srel="([^"]+)?"/.exec(part.trim());
+
+      if (!chunks) return memo;
+      memo[chunks[2]] = url.parse(chunks[1], true);
+
+      return memo;
+    });
+  },
+
+  /**
+   * We need to override the `send` method of mana so we can attempt to parse the
+   * pagination headers of GitHub and follow if needed so this can all be
+   * handled transparently.
+   *
+   * @returns {Assign} The assign instance that receives all the things
+   * @api private
+   */
+  send: function send(args) {
+    var hulk = this;
+
+    args = hulk.args(arguments);
+
+    /**
+     * A simple optional callback.
+     *
+     * @param {Response} res Incoming HTTP response.
+     * @param {Assign} assign The assign instance that got returned.
+     * @param {Object} oargs The original args that got passed in to the request.
+     * @api private
+     */
+    args.options.next = function next(res, assign, oargs) {
+      oargs = oargs || args;
+
+      //
+      // When the `nofollow` option is provided we should not follow the
+      // returned link headers from the GitHub API. It's something that users
+      // want to manage them selfs.
+      //
+      if (!res.header.link || oargs.options.nofollow) return assign.end();
+
+      var link = hulk.link(res.headers.link);
+
+      //
+      // We've received instructions from GitHub that there are more pages with
+      // information that we need to parse out. Continue to follow these link
+      // headers to create a full set of data. We leverage the `oargs` (original
+      // args) from the first request and only update the request params.
+      //
+      if (link.next.query.page) {
+        oargs.options.params.page = link.next.query.page;
+      }
+
+      if (link.next.query.per_page) {
+        oargs.options.params.per_page = link.next.query.per_page;
+      }
+
+      mana.prototype.send.call(hulk, oargs);
+    };
+
+    return mana.prototype.send.call(hulk, args);
   }
 }).drink(module);
