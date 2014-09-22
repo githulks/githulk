@@ -35,7 +35,7 @@ User.prototype.get = function get(args) {
 
   return this.send(
     ['users', project.user || args.str],
-    args.options || {},
+    this.api.options(args.options || {}),
     args.fn
   );
 };
@@ -62,7 +62,7 @@ User.prototype.orgs = function get(args) {
 
   return this.send(
     ['users', project.user || args.str, 'orgs'],
-    args.options || {},
+    this.api.options(args.options || {}),
     args.fn
   );
 };

@@ -24,11 +24,12 @@ function Organization(api) {
  */
 Organization.prototype.get = function get(args) {
   args = this.api.args(arguments);
+
   var project = this.api.project(args.str) || {};
 
   return this.send(
     ['orgs', project.user || args.str],
-    args.options || {},
+    this.api.options(args.options || {}),
     args.fn
   );
 };
@@ -44,11 +45,12 @@ Organization.prototype.get = function get(args) {
  */
 Organization.prototype.publicMembers = function publicMembers(args) {
   args = this.api.args(arguments);
+
   var project = this.api.project(args.str) || {};
 
   return this.send(
     ['orgs', project.user || args.str, 'public_members'],
-    args.options || {},
+    this.api.options(args.options || {}),
     args.fn
   );
 };

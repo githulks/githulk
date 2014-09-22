@@ -59,11 +59,10 @@ Issues.prototype.list = function list(args) {
   args = this.api.args(arguments);
 
   var options = args.options || {};
-  options.params = Issues.params;
 
   return this.send(
     ['issues'],
-    options,
+    this.api.options(options, Issues.params),
     args.fn
   );
 };
@@ -81,11 +80,10 @@ Issues.prototype.user = function user(args) {
   args = this.api.args(arguments);
 
   var options = args.options || {};
-  options.params = Issues.params;
 
   return this.send(
     ['user', 'issues'],
-    options,
+    this.api.options(options, Issues.params),
     args.fn
   );
 };
@@ -103,11 +101,10 @@ Issues.prototype.organization = function organization(args) {
   args = this.api.args(arguments);
 
   var options = args.options || {};
-  options.params = Issues.params;
 
   return this.send(
     ['orgs', args.string, 'issues'],
-    options,
+    this.api.options(options, Issues.params),
     args.fn
   );
 };
@@ -127,11 +124,9 @@ Issues.prototype.repository = function repository(args) {
   var project = this.api.project(args.str)
     , options = args.options || {};
 
-  options.params = Issues.params;
-
   return this.send(
     ['repos', project.user, project.repo, 'issues'],
-    options,
+    this.api.options(options, Issues.params),
     args.fn
   );
 };
@@ -154,7 +149,7 @@ Issues.prototype.get = function get(args) {
 
   return this.send(
     ['repos', project.user, project.repo, 'issues', args.number],
-    options,
+    this.api.options(options),
     args.fn
   );
 };
@@ -174,11 +169,9 @@ Issues.prototype.create = function create(args) {
   var project = this.api.project(args.str)
     , options = args.options || {};
 
-  options.params = Issues.create;
-
   return this.send(
     ['repos', project.user, project.repo, 'issues'],
-    this.api.merge(options, { method: 'POST' }),
+    this.api.options(this.api.merge(options, { method: 'POST' }), Issues.create),
     args.fn
   );
 };
@@ -199,11 +192,9 @@ Issues.prototype.edit = function edit(args) {
   var project = this.api.project(args.str)
     , options = args.options || {};
 
-  options.params = Issues.create;
-
   return this.send(
     ['repos', project.user, project.repo, 'issues', args.number],
-    this.api.merge(options, { method: 'PATCH' }),
+    this.api.options(this.api.merge(options, { method: 'PATCH' }), Issues.create),
     args.fn
   );
 };

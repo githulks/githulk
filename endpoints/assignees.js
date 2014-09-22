@@ -29,7 +29,7 @@ Assignees.prototype.list = function list(args) {
 
   return this.send(
     ['repos', project.user, project.repo, 'assignees'],
-    options,
+    this.api.options(options),
     args.fn
   );
 };
@@ -50,7 +50,7 @@ Assignees.prototype.assignee = function assignee(args) {
 
   return this.send(
     ['repos', project.user, project.repo, 'assignees', options.assignee],
-    options,
+    this.api.options(options),
     args.fn
   );
 };

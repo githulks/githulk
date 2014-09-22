@@ -10,7 +10,6 @@ var debug = require('diagnostics')('githulk:labels');
  */
 function Labels(api) {
   this.send = api.send.bind(api);
-  this.qs = api.querystringify;
   this.api = api;
 }
 
@@ -30,7 +29,7 @@ Labels.prototype.list = function list(args) {
 
   return this.send(
     ['repos', project.user, project.repo, 'labels'],
-    options,
+    this.api.options(options),
     args.fn
   );
 };
@@ -51,7 +50,7 @@ Labels.prototype.get = function get(args) {
 
   return this.send(
     ['repos', project.user, project.repo, 'labels', options.label],
-    options,
+    this.api.options(options),
     args.fn
   );
 };
@@ -75,9 +74,7 @@ Labels.prototype.create = function create(args) {
       'name',       // Name of the label.
       'color'       // Color of the label.
     ])],
-    this.api.merge(options, {
-      method: 'POST'
-    }),
+    this.api.options(this.api.merge(options, { method: 'POST' })),
     args.fn
   );
 };
@@ -98,9 +95,7 @@ Labels.prototype.remove = function remove(args) {
 
   return this.send(
     ['repos', project.user, project.repo, 'labels', options.label],
-    this.api.merge(options, {
-      method: 'PATCH'
-    }),
+    this.api.options(this.api.merge(options, { method: 'PATCH' })),
     args.fn
   );
 };

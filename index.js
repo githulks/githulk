@@ -160,7 +160,7 @@ mana.extend({
       memo[chunks[2]] = url.parse(chunks[1], true);
 
       return memo;
-    });
+    }, Object.create(null));
   },
 
   /**
@@ -172,9 +172,10 @@ mana.extend({
    * @api private
    */
   send: function send(args) {
-    var hulk = this;
+    args = this.args(arguments);
 
-    args = hulk.args(arguments);
+    var options = JSON.parse(JSON.stringify(args.options))
+      , hulk = this;
 
     /**
      * A simple optional callback.
@@ -192,9 +193,14 @@ mana.extend({
       // returned link headers from the GitHub API. It's something that users
       // want to manage them selfs.
       //
-      if (!res.header.link || oargs.options.nofollow) return assign.end();
+      if (!res.headers.link || oargs.options.nofollow) return assign.end();
 
       var link = hulk.link(res.headers.link);
+
+      //
+      // We've reached the end of the of the iternation, also bail out.
+      //
+      if (!link.next) return assign.end();
 
       //
       // We've received instructions from GitHub that there are more pages with
@@ -203,16 +209,42 @@ mana.extend({
       // args) from the first request and only update the request params.
       //
       if (link.next.query.page) {
-        oargs.options.params.page = link.next.query.page;
+        options.page = link.next.query.page;
       }
 
       if (link.next.query.per_page) {
-        oargs.options.params.per_page = link.next.query.per_page;
+        options.per_page = link.next.query.per_page;
       }
 
-      mana.prototype.send.call(hulk, oargs);
+      //
+      // This will be the last batch of data we need to process, so we can
+      // remove this next function and just make this thing process as normal
+      // again.
+      //
+      if (link.next.query.page === link.last.query.page) {
+        delete oargs.options.next;
+      }
+
+      //
+      // Merge the options, mana can delete options while it creates params for
+      // the connection. We've stored a copy of them before, and we're going to
+      // merge them over again.
+      //
+      hulk.merge(oargs.options, options);
+
+      //
+      // Remove oargs.str if we have an array preference.
+      //
+      if (oargs.str && oargs.array) oargs.str = '';
+      oargs.options.assign = assign;
+
+      return mana.prototype.send.call(hulk,
+        oargs.array, oargs.fn, oargs.nr, oargs.options, oargs.str
+      );
     };
 
-    return mana.prototype.send.call(hulk, args);
+    return mana.prototype.send.call(hulk,
+      args.array, args.fn, args.nr, args.options, args.str
+    );
   }
 }).drink(module);

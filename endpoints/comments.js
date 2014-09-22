@@ -31,7 +31,7 @@ Comments.prototype.list = function list(args) {
 
   return this.send(
     ['repos', project.user, project.repo, 'issues', args.number, 'comments'],
-    options,
+    this.api.options(options),
     args.fn
   );
 };
@@ -51,15 +51,13 @@ Comments.prototype.repository = function repository(args) {
   var project = this.api.project(args.str)
     , options = args.options || {};
 
-  options.params = [
-    'direction',
-    'since',
-    'sort'
-  ];
-
   return this.send(
     ['repos', project.user, project.repo, 'issues', 'comments'],
-    options,
+    this.api.options(options, [
+      'direction',
+      'since',
+      'sort'
+    ]),
     args.fn
   );
 };
@@ -82,7 +80,7 @@ Comments.prototype.get = function get(args) {
 
   return this.send(
     ['repos', project.user, project.repo, 'issues', 'comments', args.number],
-    options,
+    this.api.options(options),
     args.fn
   );
 };
@@ -103,11 +101,9 @@ Comments.prototype.create = function create(args) {
   var project = this.api.project(args.str)
     , options = args.options || {};
 
-  options.params = ['body'];
-
   return this.send(
     ['repos', project.user, project.repo, 'issues', args.number, 'comments'],
-    this.api.merge(options, { method: 'POST' }),
+    this.api.options(this.api.merge(options, { method: 'POST' }), ['body']),
     args.fn
   );
 };
@@ -128,11 +124,9 @@ Comments.prototype.edit = function create(args) {
   var project = this.api.project(args.str)
     , options = args.options || {};
 
-  options.params = ['body'];
-
   return this.send(
     ['repos', project.user, project.repo, 'issues', 'comments', args.number],
-    this.api.merge(options, { method: 'PATCH' }),
+    this.api.options(this.api.merge(options, { method: 'PATCH' }), ['body']),
     args.fn
   );
 };
@@ -155,7 +149,7 @@ Comments.prototype.remove = function remove(args) {
 
   return this.send(
     ['repos', project.user, project.repo, 'issues', 'comments', args.number],
-    this.api.merge(options, { method: 'DELETE' }),
+    this.api.options(this.api.merge(options, { method: 'DELETE' })),
     args.fn
   );
 };

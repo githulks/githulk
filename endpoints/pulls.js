@@ -56,11 +56,9 @@ Pulls.prototype.list = function list(args) {
   var project = this.api.project(args.str)
     , options = args.options || {};
 
-  options.params = Pulls.params;
-
   return this.send(
     ['repos', project.user, project.repo, 'pulls'],
-    options,
+    this.api.options(options, Pulls.params),
     args.fn
   );
 };
@@ -83,7 +81,7 @@ Pulls.prototype.get = function get(args) {
 
   return this.send(
     ['repos', project.user, project.repo, 'pulls', args.number],
-    options,
+    this.api.options(options),
     args.fn
   );
 };
@@ -103,11 +101,9 @@ Pulls.prototype.create = function create(args) {
   var project = this.api.project(args.str)
     , options = args.options || {};
 
-  options.params = Pulls.create;
-
   return this.send(
     ['repos', project.user, project.repo, 'pulls'],
-    this.api.merge(options, { method: 'POST' }),
+    this.api.options(this.api.merge(options, { method: 'POST' }), Pulls.create),
     args.fn
   );
 };
@@ -128,11 +124,9 @@ Pulls.prototype.edit = function edit(args) {
   var project = this.api.project(args.str)
     , options = args.options || {};
 
-  options.params = Pulls.create;
-
   return this.send(
     ['repos', project.user, project.repo, 'pulls', args.number],
-    this.api.merge(options, { method: 'PATCH' }),
+    this.api.options(this.api.merge(options, { method: 'PATCH' }), Pulls.create),
     args.fn
   );
 };
@@ -155,7 +149,7 @@ Pulls.prototype.commits = function commits(args) {
 
   return this.send(
     ['repos', project.user, project.repo, 'pulls', args.number, 'commits'],
-    options,
+    this.api.options(options),
     args.fn
   );
 };
@@ -178,7 +172,7 @@ Pulls.prototype.files = function files(args) {
 
   return this.send(
     ['repos', project.user, project.repo, 'pulls', args.number, 'files'],
-    options,
+    this.api.options(options),
     args.fn
   );
 };
@@ -201,7 +195,7 @@ Pulls.prototype.merged = function merge(args) {
 
   return this.send(
     ['repos', project.user, project.repo, 'pulls', args.number, 'merge'],
-    options,
+    this.api.options(options),
     args.fn
   );
 };
@@ -224,7 +218,7 @@ Pulls.prototype.merge = function merge(args) {
 
   return this.send(
     ['repos', project.user, project.repo, 'pulls', args.number, 'merge'],
-    this.api.merge(options, { method: 'PUT' }),
+    this.api.options(this.api.merge(options, { method: 'PUT' })),
     args.fn
   );
 };
