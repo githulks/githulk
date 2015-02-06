@@ -198,9 +198,9 @@ mana.extend({
       var link = hulk.link(res.headers.link);
 
       //
-      // We've reached the end of the of the iternation, also bail out.
+      // We've reached the end of the of the iteration, also bail out.
       //
-      if (!link.next) return assign.end();
+      if (!link.next || !link.next.query) return assign.end();
 
       //
       // We've received instructions from GitHub that there are more pages with
@@ -221,7 +221,7 @@ mana.extend({
       // remove this next function and just make this thing process as normal
       // again.
       //
-      if (link.next.query.page === link.last.query.page) {
+      if (!link.last || link.next.query.page === link.last.query.page) {
         delete oargs.options.next;
       }
 
