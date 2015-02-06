@@ -35,6 +35,24 @@ Organization.prototype.get = function get(args) {
 };
 
 /**
+ * List all organizations for the authenticated user.
+ *
+ * @param {Object} options Optional options.
+ * @param {function} fn The callback.
+ * @returns {Assign}
+ * @api public
+ */
+Organization.prototype.list = function list(args) {
+  args = this.api.args(arguments);
+
+  return this.send(
+    ['user', 'orgs'],
+    this.api.options(args.options || {}),
+    args.fn
+  );
+};
+
+/**
  * Get public member information for a given org.
  *
  * @param {String} project The project details.
