@@ -12,11 +12,14 @@ function Webhook(api) {
   this.api = api;
 }
 
+/**
+ * Properties we need in the body of the request for create
+ */
 Webhook.create = [
-  'name', // Name of a valid webhook service
+  'name',   // Name of a valid webhook service
   'config', // config, object with k, v for the service
   'events', // array of events that we hook into
-  'active'
+  'active'  // specify a boolean whether the service is active
 ];
 
 /**
@@ -35,3 +38,5 @@ Webhook.prototype.create = function (args) {
     args.fn
   );
 };
+
+module.exports = Webhook;
