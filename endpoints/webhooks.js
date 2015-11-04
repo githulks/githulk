@@ -3,6 +3,7 @@
 /**
  * Webhooks API endpoint
  *
+ * @constructor
  * @param {mana} api The actual API instance
  * @api private
  */
@@ -13,11 +14,16 @@ function Webhook(api) {
 }
 
 /**
- * Unwrap a result into an object when necessary
+ * Unwrap a result into an object when necessary.
+ *
+ * @param {Function} fn Callback to receive the unwrapped stuff.
+ * @returns {Function} The unwrap stuff.
+ * @api private
  */
 function unwrapper(fn) {
   return function unwrap(err, results) {
-    if (err) { return fn(err); }
+    if (err) return fn(err);
+
     return fn(undefined, results
         && results.length <= 1
           ? results[0]
@@ -27,6 +33,9 @@ function unwrapper(fn) {
 
 /**
  * Properties we need in the body of the request for create
+ *
+ * @type {Object}
+ * @public
  */
 Webhook.create = [
   'name',   // Name of a valid webhook service
@@ -37,8 +46,13 @@ Webhook.create = [
 
 /**
  * Create a new webhook for the project
+ *
+ * @param {String} project user/repo project information.
+ * @param {Object} options Configuration for the post information.
+ * @returns {Assign}
+ * @api public
  */
-Webhook.prototype.create = function (args) {
+Webhook.prototype.create = function create(args) {
   args = this.api.args(arguments);
   args.options = this.options(this.api.merge(args.options, { method: 'POST' }), Webhook.create);
 
@@ -52,14 +66,21 @@ Webhook.prototype.create = function (args) {
 };
 
 /**
- * Get a webhooks by id
+ * Get a webhooks by id.
+ *
+ * @param {String} project user/repo project information.
+ * @param {Object} options Configuration for the post information.
+ * @returns {Assign}
+ * @api public
  */
-Webhook.prototype.get = function (args) {
+Webhook.prototype.get = function get(args) {
   args = this.api.args(arguments);
 
-  var project = this.api.project(args.str);
+  var project = this.api.project(args.str)
+    , id;
+
   args.options = this.options(args.options);
-  var id = args.options.id;
+  id = args.options.id;
 
   if (!id) {
     return args.fn(new Error('id is required parameter'));
@@ -74,13 +95,20 @@ Webhook.prototype.get = function (args) {
 
 /**
  * Delete a webhook for the given project and id
+ *
+ * @param {String} project user/repo project information.
+ * @param {Object} options Configuration for the post information.
+ * @returns {Assign}
+ * @api public
  */
-Webhook.prototype.delete = function (args) {
+Webhook.prototype.delete = function del(args) {
   args = this.api.args(arguments);
 
-  var project = this.api.project(args.str);
+  var project = this.api.project(args.str)
+    , id;
+
   args.options = this.options(this.api.merge(args.options, { method: 'DELETE' }), []);
-  var id = args.options.id;
+  id = args.options.id;
 
   if (!id) {
     return args.fn(new Error('id is required parameter'));
@@ -95,6 +123,11 @@ Webhook.prototype.delete = function (args) {
 
 /**
  * List the webhooks for a given repo
+ *
+ * @param {String} project user/repo project information.
+ * @param {Object} options Configuration for the post information.
+ * @returns {Assign}
+ * @api public
  */
 Webhook.prototype.list = function (args) {
   args = this.api.args(arguments);

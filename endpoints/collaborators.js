@@ -42,7 +42,7 @@ Collaborators.prototype.get = function get(args) {
  *
  * @param {String} project
  * @param {Object} Options with username/user.
- * @returns {Collaborator}
+ * @returns {Assign}
  * @api public
  */
 Collaborators.prototype.add = function add(args) {
