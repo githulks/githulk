@@ -36,6 +36,34 @@ exports.repo = '3rd-Eden/githulk';
 exports.owner = '3rd-Eden';
 
 /**
+ * Example webhook fixture options used for testing
+ */
+exports.webhooks = {
+  web: {
+    repo: 'jcrugzz/webhook-test',
+    options: {
+      name: 'web',
+      config: {
+        url: 'http://my-jenkins-server/ghprbhook/'
+      },
+      events: ['pull_request', 'pull_request_review_comment', 'issue_comment'],
+      active: true
+    }
+  },
+  jenkins: {
+    repo: 'jcrugzz/webhook-test',
+    options: {
+      name: 'jenkins',
+      config: {
+        jenkins_hook_url: 'https://my-fun-times/github_webhook/'
+      },
+      events: ['push'],
+      active: true
+    }
+  }
+};
+
+/**
  * A single comment id which we need to retrieve.
  *
  * @type {Number}
