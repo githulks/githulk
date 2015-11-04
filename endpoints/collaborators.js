@@ -41,8 +41,9 @@ Collaborators.prototype.get = function get(args) {
  * Add a collaborator to the owner/repo given
  *
  * @param {String} project
- * @param {Object}
- *
+ * @param {Object} Options with username/user.
+ * @returns {Collaborator}
+ * @api public
  */
 Collaborators.prototype.add = function add(args) {
   args = this.api.args(arguments);
@@ -50,7 +51,7 @@ Collaborators.prototype.add = function add(args) {
 
   var user = args.options.username || args.options.user;
 
-  if (!user) { return arg.fn(new Error('user is a required options')); }
+  if (!user) return args.fn(new Error('User is a required options'));
 
   var project = this.api(args.str);
 
@@ -59,7 +60,6 @@ Collaborators.prototype.add = function add(args) {
     args.options,
     args.fn
   );
-
 };
 
 //
