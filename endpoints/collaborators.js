@@ -37,6 +37,31 @@ Collaborators.prototype.get = function get(args) {
   );
 };
 
+/**
+ * Add a collaborator to the owner/repo given
+ *
+ * @param {String} project
+ * @param {Object} Options with username/user.
+ * @returns {Assign}
+ * @api public
+ */
+Collaborators.prototype.add = function add(args) {
+  args = this.api.args(arguments);
+  args.options = this.options(args.options);
+
+  var user = args.options.username || args.options.user;
+
+  if (!user) return args.fn(new Error('User is a required options'));
+
+  var project = this.api(args.str);
+
+  return this.send(
+    ['repos', project.user, project.repo, 'collaborators', user],
+    args.options,
+    args.fn
+  );
+};
+
 //
 // Expose the Collaborators API.
 //
