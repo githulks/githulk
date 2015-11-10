@@ -1,6 +1,7 @@
 'use strict';
 
 var debug = require('diagnostics')('githulk:repository');
+var unwrap = require('unwrapper');
 
 /**
  * Repositories API endpoint.
@@ -154,7 +155,7 @@ Repository.prototype.contents = function contents(args) {
   return this.send(
     ['repos', project.user, project.repo, options.path],
     options,
-    args.fn
+    unwrap(args.fn)
   );
 };
 
