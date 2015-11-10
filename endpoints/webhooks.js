@@ -138,7 +138,7 @@ Webhook.prototype.list = function (args) {
   return this.send(
     ['repos', project.user, project.repo, 'hooks'],
     args.options,
-    unwrapper(args.fn)
+    args.fn
   );
 };
 
