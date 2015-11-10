@@ -1,5 +1,7 @@
 'use strict';
 
+var unwrapper = require('unwrapper');
+
 /**
  * Webhooks API endpoint
  *
@@ -11,24 +13,6 @@ function Webhook(api) {
   this.send = api.send.bind(api);
   this.options = api.options;
   this.api = api;
-}
-
-/**
- * Unwrap a result into an object when necessary.
- *
- * @param {Function} fn Callback to receive the unwrapped stuff.
- * @returns {Function} The unwrap stuff.
- * @api private
- */
-function unwrapper(fn) {
-  return function unwrap(err, results) {
-    if (err) return fn(err);
-
-    return fn(undefined, results
-        && results.length <= 1
-          ? results[0]
-          : results);
-  };
 }
 
 /**
