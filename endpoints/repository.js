@@ -106,6 +106,28 @@ Repository.prototype.branches = function branches(args) {
 };
 
 /**
+ * Get commits for a given repo.
+ *
+ * @param {String} project The project details.
+ * @param {Object} options Optional options.
+ * @param {function} fn The callback.
+ * @returns {Assign}
+ * @api public
+ */
+Repository.prototype.commits = function commits(args) {
+  args = this.api.args(arguments);
+  args.options = this.options(args.options);
+
+  var project = this.api.project(args.str);
+
+  return this.send(
+    ['repos', project.user, project.repo, 'commits'],
+    args.options,
+    args.fn
+  );
+};
+
+/**
  * Get the README contents of an project.
  *
  * @param {String} project The project details.

@@ -23,4 +23,20 @@ describe('githulk.repository', function () {
       });
     });
   });
+
+  describe('.commits', function () {
+    it('lists commits', function (next) {
+      githulk.repository.commits('twbs/bootstrap', function (err, commits) {
+        if (err) return next(err);
+
+        assume(commits).is.a('array');
+        commits.forEach(function (commit) {
+          assume(commit.sha).to.be.a('string');
+          assume(commit.commit).to.be.an('object');
+        });
+
+        next();
+      });
+    });
+  });
 });
