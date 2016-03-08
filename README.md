@@ -39,7 +39,7 @@ optional options object. The following options can be provided:
 - `retries`: Amount of retries before finally giving up.
 - `factor`: Exponential back off factor.
 - `cache`: A cache for conditional lookups.
-- `username`: A Github username (see Authorization)
+- `user`: A Github username (see Authorization)
 - `password`: A Github password (see Authorization)
 - `token`: A oauth token (see Authorization)
 
