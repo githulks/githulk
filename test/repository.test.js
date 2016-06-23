@@ -61,7 +61,6 @@ describe('githulk.repository', function () {
       });
     });
 
-
     it('returns object for file', function (next) {
       githulk.repository.contents(hulk.repo, { path: '/index.js' }, function (err, result) {
         if (err) return next(err);
