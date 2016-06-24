@@ -1,6 +1,7 @@
 'use strict';
 
 var debug = require('diagnostics')('githulk:repository');
+var unwrap = require('unwrapper');
 
 /**
  * Repositories API endpoint.
@@ -199,15 +200,9 @@ Repository.prototype.contents = function contents(args) {
   return this.send(
     ['repos', project.user, project.repo, options.path],
     options,
-    function (err, contents) {
-      if (err) return args.fn(err);
-      // Result could be a file/symlink/submodule if there is only one element
-      // Check path of result and if it matches the requested path, unwrap array
-      if (contents && contents.length === 1 && contents[0].path === cleanedPath) {
-        return args.fn(undefined, contents[0]);
-      }
-      args.fn(undefined, contents);
-    }
+    unwrap(args.fn, function(content) {
+      return content.path === cleanedPath
+    })
   );
 };
 

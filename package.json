@@ -20,7 +20,7 @@
     "diagnostics": "1.0.x",
     "extract-github": "1.0.x",
     "mana": "0.1.x",
-    "unwrapper": "^1.0.0"
+    "unwrapper": "^1.1.0"
   },
   "devDependencies": {
     "assume": "1.4.x",
