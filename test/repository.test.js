@@ -73,6 +73,7 @@ describe('githulk.repository', function () {
     });
 
     it('returns object for submodule', function (next) {
+      // NOTE: This repo should be moved to githulks org as a test package
       githulk.repository.contents('satish-ravi/githulk-test', { path: 'githulk' }, function (err, result) {
         if (err) return next(err);
 
