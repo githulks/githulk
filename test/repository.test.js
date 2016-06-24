@@ -72,5 +72,39 @@ describe('githulk.repository', function () {
       });
     });
 
+    it('returns object for submodule', function (next) {
+      githulk.repository.contents('satish-ravi/githulk-test', { path: 'githulk' }, function (err, result) {
+        if (err) return next(err);
+
+        assume(result).to.be.an('object');
+        assume(result).owns('submodule_git_url');
+
+        next();
+      });
+    });
+
+    it('returns symlink object for symlink to a directory', function (next) {
+      githulk.repository.contents('satish-ravi/githulk-test', { path: 'symlink-dir' }, function (err, result) {
+        if (err) return next(err);
+
+        assume(result).to.be.an('object');
+        assume(result.type).equals('symlink');
+        assume(result).owns('target');
+
+        next();
+      });
+    });
+
+    it('returns file object for symlink to a file', function (next) {
+      githulk.repository.contents('satish-ravi/githulk-test', { path: 'symlink' }, function (err, result) {
+        if (err) return next(err);
+
+        assume(result).to.be.an('object');
+        assume(result.type).equals('file');
+
+        next();
+      });
+    });
+
   });
 });
