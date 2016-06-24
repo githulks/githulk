@@ -194,12 +194,15 @@ Repository.prototype.contents = function contents(args) {
   var options = args.options = this.options(args.options, [ 'ref' ])
     , project = this.api.project(args.str);
 
+  var cleanedPath = options.path.replace(/(^\/+)|(\/+$)/g, '');
   options.path = 'contents/'+ (options.path || '');
 
   return this.send(
     ['repos', project.user, project.repo, options.path],
     options,
-    unwrap(args.fn)
+    unwrap(args.fn, function(content) {
+      return content.path === cleanedPath
+    })
   );
 };
 
