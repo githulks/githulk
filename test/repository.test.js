@@ -26,7 +26,7 @@ describe('githulk.repository', function () {
 
   describe('.commits', function () {
     it('lists commits', function (next) {
-      githulk.repository.commits('twbs/bootstrap', function (err, commits) {
+      githulk.repository.commits('foreverjs/forever', function (err, commits) {
         if (err) return next(err);
 
         assume(commits).is.a('array');
@@ -34,6 +34,29 @@ describe('githulk.repository', function () {
           assume(commit.sha).to.be.a('string');
           assume(commit.commit).to.be.an('object');
         });
+
+        next();
+      });
+    });
+  });
+
+  describe('.contents', function () {
+    it('returns array for directory', function (next) {
+      githulk.repository.contents(hulk.repo, { path: 'endpoints' }, function (err, results) {
+        if (err) return next(err);
+
+        assume(results).is.a('array');
+
+        next();
+      });
+    });
+
+    it('returns object for file', function (next) {
+      githulk.repository.contents(hulk.repo, { path: '/index.js' }, function (err, result) {
+        if (err) return next(err);
+
+        assume(result).to.be.an('object');
+        assume(result).owns('content');
 
         next();
       });
