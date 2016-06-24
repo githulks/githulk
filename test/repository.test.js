@@ -51,6 +51,17 @@ describe('githulk.repository', function () {
       });
     });
 
+    it('returns array for directory with a single file', function (next) {
+      githulk.repository.contents('indexzero/indexzero', { path: 'test' }, function (err, results) {
+        if (err) return next(err);
+
+        assume(results).is.a('array');
+
+        next();
+      });
+    });
+
+
     it('returns object for file', function (next) {
       githulk.repository.contents(hulk.repo, { path: '/index.js' }, function (err, result) {
         if (err) return next(err);
@@ -61,5 +72,6 @@ describe('githulk.repository', function () {
         next();
       });
     });
+
   });
 });
