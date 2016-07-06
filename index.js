@@ -238,8 +238,9 @@ mana.extend({
       if (oargs.str && oargs.array) oargs.str = '';
       oargs.options.assign = assign;
 
+      // No need to enqueue another callback.
       return mana.prototype.send.call(hulk,
-        oargs.array, oargs.fn, oargs.nr, oargs.options, oargs.str
+        oargs.array, oargs.nr, oargs.options, oargs.str
       );
     };
 
