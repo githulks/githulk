@@ -4,7 +4,7 @@
   "description": "Small but powerful Github client",
   "main": "index.js",
   "scripts": {
-    "test": "illuminati"
+    "test": "mocha test/*.test.js"
   },
   "repository": {
     "type": "git",
@@ -24,7 +24,7 @@
   },
   "devDependencies": {
     "assume": "1.4.x",
-    "illuminati": "0.0.x",
+    "mocha": "3.1.2",
     "pre-commit": "1.1.x"
   }
 }
