@@ -25,7 +25,7 @@ exports.issues = { closed: 3, open: 2, comments: 2 };
  * @type {String}
  * @public
  */
-exports.repo = '3rd-Eden/githulk';
+exports.repo = 'githulks/githulk';
 
 /**
  * Name of the owner of the test suite and repository.
@@ -40,7 +40,7 @@ exports.owner = '3rd-Eden';
  */
 exports.webhooks = {
   web: {
-    repo: 'jcrugzz/webhook-test',
+    repo: 'githulks/webhook-test',
     options: {
       name: 'web',
       config: {
@@ -51,7 +51,7 @@ exports.webhooks = {
     }
   },
   jenkins: {
-    repo: 'jcrugzz/webhook-test',
+    repo: 'githulks/webhook-test',
     options: {
       name: 'jenkins',
       config: {
