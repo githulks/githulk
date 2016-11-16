@@ -41,6 +41,13 @@ describe('githulk.repository', function () {
   });
 
   describe('.contents', function () {
+    it('returns an error when getting files from an unknown repo', function (next) {
+      githulk.repository.contents('3rd-Eden/githulk-doesnt-exist-please', { path: '/index.js' }, function (err) {
+        assume(err).is.a('error');
+        next();
+      });
+    });
+
     it('returns array for directory', function (next) {
       githulk.repository.contents(hulk.repo, { path: 'endpoints' }, function (err, results) {
         if (err) return next(err);
