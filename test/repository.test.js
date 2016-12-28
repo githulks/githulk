@@ -80,8 +80,7 @@ describe('githulk.repository', function () {
     });
 
     it('returns object for submodule', function (next) {
-      // NOTE: This repo should be moved to githulks org as a test package
-      githulk.repository.contents('satish-ravi/githulk-test', { path: 'githulk' }, function (err, result) {
+      githulk.repository.contents('githulks/githulk-test', { path: 'githulk' }, function (err, result) {
         if (err) return next(err);
 
         assume(result).to.be.an('object');
@@ -92,7 +91,7 @@ describe('githulk.repository', function () {
     });
 
     it('returns symlink object for symlink to a directory', function (next) {
-      githulk.repository.contents('satish-ravi/githulk-test', { path: 'symlink-dir' }, function (err, result) {
+      githulk.repository.contents('githulks/githulk-test', { path: 'symlink-dir' }, function (err, result) {
         if (err) return next(err);
 
         assume(result).to.be.an('object');
@@ -104,7 +103,7 @@ describe('githulk.repository', function () {
     });
 
     it('returns file object for symlink to a file', function (next) {
-      githulk.repository.contents('satish-ravi/githulk-test', { path: 'symlink' }, function (err, result) {
+      githulk.repository.contents('githulks/githulk-test', { path: 'symlink' }, function (err, result) {
         if (err) return next(err);
 
         assume(result).to.be.an('object');

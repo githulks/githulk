@@ -17,7 +17,7 @@
   "author": "Arnout Kazemier",
   "license": "MIT",
   "dependencies": {
-    "diagnostics": "1.0.x",
+    "diagnostics": "~1.1.0",
     "extract-github": "1.0.x",
     "mana": "0.1.x",
     "unwrapper": "^1.1.0"
@@ -25,6 +25,6 @@
   "devDependencies": {
     "assume": "1.4.x",
     "mocha": "3.2.0",
-    "pre-commit": "1.1.x"
+    "pre-commit": "~1.2.0"
   }
 }
