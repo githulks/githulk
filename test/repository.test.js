@@ -24,6 +24,20 @@ describe('githulk.repository', function () {
     });
   });
 
+  describe('.branch', function () {
+    it('gets details about a branch', function (next) {
+      githulk.repository.branch('twbs/bootstrap', { branch: 'gh-pages' }, function (err, branch) {
+        if (err) return next(err);
+
+        assume(branch).is.an('object');
+        assume(branch.name).to.be.a('string');
+        assume(branch.commit).to.be.an('object');
+
+        next();
+      });
+    });
+  });
+
   describe('.commits', function () {
     it('lists commits', function (next) {
       githulk.repository.commits('foreverjs/forever', function (err, commits) {
