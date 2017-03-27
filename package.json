@@ -1,6 +1,6 @@
 {
   "name": "githulk",
-  "version": "1.1.2",
+  "version": "1.2.0",
   "description": "Small but powerful Github client",
   "main": "index.js",
   "scripts": {
