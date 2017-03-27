@@ -107,7 +107,7 @@ Repository.prototype.branches = function branches(args) {
 
 /**
  * Get information about the specified branch in the specified repo.
- * 
+ *
  * @param {String} project The project details.
  * @param {Object} options Optional options.
  * @param {Function} fn The callback.
@@ -123,7 +123,7 @@ Repository.prototype.branch = function branch(args) {
   return this.send(
     ['repos', project.user, project.repo, 'branches', options.branch],
     args.options,
-    (err, data) => {
+    function handler(err, data) {
       if (err) return args.fn(err);
 
       args.fn(null, data.length && data.length > 0 ? data[0] : null);
