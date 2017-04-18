@@ -6,10 +6,7 @@
   "scripts": {
     "test": "mocha test/*.test.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "http://github/3rd-Eden/githulk"
-  },
+  "repository": "githulks/githulk",
   "keywords": [
     "github",
     "api"
