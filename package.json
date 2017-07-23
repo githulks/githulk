@@ -15,7 +15,7 @@
   "license": "MIT",
   "dependencies": {
     "diagnostics": "~1.1.0",
-    "extract-github": "1.0.x",
+    "extract-github": "~1.0.0",
     "mana": "0.1.x",
     "unwrapper": "^1.1.0"
   },
