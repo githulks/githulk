@@ -54,6 +54,20 @@ describe('githulk.repository', function () {
     });
   });
 
+  describe('.commitSha', function () {
+    it('get the LONG SHA for a specific commit', function (next) {
+
+      githulk.repository.commitSha('twbs/bootstrap', { sha: 'f2e912b' }, function (err, longSha) {
+        if (err) return next(err);
+
+        assume(longSha).is.a('string');
+        assume(longSha).equals('f2e912bb0e5041fead48bdbcaaa23de1c40291d5');
+
+        next();
+      });
+    });
+  });
+
   describe('.contents', function () {
     it('returns an error when getting files from an unknown repo', function (next) {
       githulk.repository.contents('3rd-Eden/githulk-doesnt-exist-please', { path: '/index.js' }, function (err) {
