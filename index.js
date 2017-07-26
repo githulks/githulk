@@ -26,7 +26,7 @@ var debug = require('diagnostics')('githulk')
  * @api public
  */
 mana.extend({
-  initialise: function initalise(options) {
+  initialise: function initialise(options) {
     options = options || {};
 
     options.url = 'url' in options ? options.url : 'https://api.github.com/';
