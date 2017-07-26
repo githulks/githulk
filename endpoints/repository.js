@@ -151,7 +151,6 @@ Repository.prototype.commits = function commits(args) {
     args.options,
     args.fn
   );
-
 };
 
 /**
@@ -179,7 +178,6 @@ Repository.prototype.commitSha = function commitSha(args) {
     }
   );
 };
-
 
 /**
  * Get the README contents of an project.
