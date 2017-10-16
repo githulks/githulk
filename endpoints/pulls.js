@@ -223,6 +223,30 @@ Pulls.prototype.merge = function merge(args) {
   );
 };
 
+/**
+ * Request review from the specified set of users on the given pull request.
+ *
+ * @param {String} project User/repo combination.
+ * @param {Number} number The pull request number.
+ * @param {Object} options Optional options.
+ * @param {String[]} options.reviewers List of usernames to request review from
+ * @param {Function} fn The callback.
+ * @returns {Assign}
+ * @api public
+ */
+Pulls.prototype.requestReviewers = function requestReviewers(args) {
+  args = this.api.args(arguments);
+  
+    var project = this.api.project(args.str)
+      , options = args.options || {};
+  
+    return this.send(
+      ['repos', project.user, project.repo, 'pulls', args.number, 'requested_reviewers'],
+      this.api.options(this.api.merge(options, { method: 'POST' })),
+      args.fn
+    );
+}
+
 //
 // Expose the issues API.
 //
