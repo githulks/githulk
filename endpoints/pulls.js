@@ -43,6 +43,17 @@ Pulls.create = [
 ];
 
 /**
+ * All available options for requesting pull request review.
+ * 
+ * @type {Array}
+ * @private
+ */
+Pulls.requestReviewers = [
+  'reviewers',  // An array of reviewer users to request review from
+  'team_reviewers' // An array of team slugs to request review from
+]
+
+/**
  * List pull requests.
  *
  * @param {Object} options Optional options.
@@ -230,6 +241,7 @@ Pulls.prototype.merge = function merge(args) {
  * @param {Number} number The pull request number.
  * @param {Object} options Optional options.
  * @param {String[]} options.reviewers List of usernames to request review from
+ * @param {String[]} options.team_reviewers List of team slugs to request review from
  * @param {Function} fn The callback.
  * @returns {Assign}
  * @api public
@@ -242,7 +254,7 @@ Pulls.prototype.requestReviewers = function requestReviewers(args) {
   
     return this.send(
       ['repos', project.user, project.repo, 'pulls', args.number, 'requested_reviewers'],
-      this.api.options(this.api.merge(options, { method: 'POST' })),
+      this.api.options(this.api.merge(options, { method: 'POST' }), Pulls.requestReviewers),
       args.fn
     );
 }
