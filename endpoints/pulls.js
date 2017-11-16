@@ -51,7 +51,7 @@ Pulls.create = [
 Pulls.requestReviewers = [
   'reviewers',  // An array of reviewer users to request review from
   'team_reviewers' // An array of team slugs to request review from
-]
+];
 
 /**
  * List pull requests.
@@ -248,16 +248,16 @@ Pulls.prototype.merge = function merge(args) {
  */
 Pulls.prototype.requestReviewers = function requestReviewers(args) {
   args = this.api.args(arguments);
-  
-    var project = this.api.project(args.str)
-      , options = args.options || {};
-  
-    return this.send(
-      ['repos', project.user, project.repo, 'pulls', args.number, 'requested_reviewers'],
-      this.api.options(this.api.merge(options, { method: 'POST' }), Pulls.requestReviewers),
-      args.fn
-    );
-}
+
+  var project = this.api.project(args.str)
+    , options = args.options || {};
+
+  return this.send(
+    ['repos', project.user, project.repo, 'pulls', args.number, 'requested_reviewers'],
+    this.api.options(this.api.merge(options, { method: 'POST' }), Pulls.requestReviewers),
+    args.fn
+  );
+};
 
 //
 // Expose the issues API.
