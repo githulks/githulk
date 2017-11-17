@@ -132,6 +132,50 @@ Repository.prototype.branch = function branch(args) {
 };
 
 /**
+ * Get all tags for a given repo.
+ *
+ * @param {String} project The project details.
+ * @param {Object} options Optional options.
+ * @param {function} fn The callback.
+ * @returns {Assign}
+ * @api public
+ */
+Repository.prototype.tags = function tags(args) {
+  args = this.api.args(arguments);
+  args.options = this.options(args.options);
+
+  var project = this.api.project(args.str);
+
+  return this.send(
+    ['repos', project.user, project.repo, 'git', 'refs', 'tags'],
+    args.options,
+    args.fn
+  );
+};
+
+/**
+ * Get the given tag for a given repo.
+ *
+ * @param {String} project The project details.
+ * @param {Object} options Optional options.
+ * @param {function} fn The callback.
+ * @returns {Assign}
+ * @api public
+ */
+Repository.prototype.tag = function tag(args) {
+  args = this.api.args(arguments);
+  var options = args.options = this.options(args.options);
+
+  var project = this.api.project(args.str);
+
+  return this.send(
+    ['repos', project.user, project.repo, 'git', 'refs', 'tags', options.tag],
+    args.options,
+    arg.fn
+  );
+};
+
+/**
  * Get commits for a given repo.
  *
  * @param {String} project The project details.

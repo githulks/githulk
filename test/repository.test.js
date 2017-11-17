@@ -38,6 +38,43 @@ describe('githulk.repository', function () {
     });
   });
 
+  describe('.tags', function () {
+    it('lists all tags', function (next) {
+      githulk.repository.tags('twbs/bootstrap', function (err, tags) {
+        if (err) return next(err);
+
+        assume(tags).is.a('array');
+        tags.forEach(function (tag) {
+          assume(tag.ref).to.be.a('string');
+
+          assume(tag.object).to.be.an('object');
+          assume(tag.object.sha).to.be.a('string');
+          assume(tag.object.type).to.be.a('string');
+        });
+
+        next();
+      });
+    });
+  });
+
+  describe('.tag', function () {
+    it('gets a single tag', function (next) {
+      githulk.repository.tag('twbs/bootstrap', { tag: 'v3.3.7' }, function (err, tag) {
+        if (err) return next(err);
+
+        assume(tag).is.an('object');
+        assume(tag.ref).to.be.a('string');
+        assume(tag.ref).includes('v3.3.7');
+
+        assume(tag.object).to.be.an('object');
+        assume(tag.object.sha).to.be.a('string');
+        assume(tag.object.type).to.be.a('string');
+
+        next();
+      });
+    });
+  });
+
   describe('.commits', function () {
     it('lists commits', function (next) {
       githulk.repository.commits('foreverjs/forever', function (err, commits) {
