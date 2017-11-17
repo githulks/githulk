@@ -171,7 +171,7 @@ Repository.prototype.tag = function tag(args) {
   return this.send(
     ['repos', project.user, project.repo, 'git', 'refs', 'tags', options.tag],
     args.options,
-    arg.fn
+    unwrap(args.fn)
   );
 };
 
