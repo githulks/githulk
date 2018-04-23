@@ -28,7 +28,14 @@ GraphQL.prototype.get = function get(args) {
   args.options.method = 'POST';
   args.options.params = { query: args.options.query || '' };
 
-  return this.send(['graphql'], this.api.options(args.options), args.fn);
+  return this.send(
+    ['graphql'], 
+    this.api.options(args.options), 
+    function handler(err, data) {
+      if (err) return args.fn(err);
+
+      args.fn(null, data.length ? data[0] : null);
+  });
 };
 
 //

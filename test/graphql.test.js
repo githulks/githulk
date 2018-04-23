@@ -1,14 +1,14 @@
 'use strict';
 
-describe('githulk.issues', function () {
+describe('githulk.graphql', function () {
   var hulk = require('./hulk')
     , assume = hulk.assume
     , githulk = hulk.hulk;
 
   this.timeout(30000);
 
-  describe('basic', function() {
-    it('does basic things', function (next) {
+  describe('queries', function() {
+    it('processes queries', function (next) {
       githulk.graphql.get({ 
         query: `
           {
@@ -34,9 +34,8 @@ describe('githulk.issues', function () {
         },
         function (err, results) {
           if (err) return next(err);
-          if (results[0].errors) return next(results[0].errors[0]);
 
-          var data = results[0].data;
+          var data = results.data;
 
           var packageJson = require('../package.json');
 
