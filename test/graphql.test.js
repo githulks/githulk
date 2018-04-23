@@ -7,7 +7,7 @@ describe('githulk.issues', function () {
 
   this.timeout(30000);
 
-  describe.only('basic', function() {
+  describe('basic', function() {
     it('does basic things', function (next) {
       githulk.graphql.get({ 
         query: `
