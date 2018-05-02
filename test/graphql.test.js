@@ -1,5 +1,4 @@
 'use strict';
-
 describe('githulk.graphql', function () {
   var hulk = require('./hulk')
     , assume = hulk.assume
@@ -9,34 +8,27 @@ describe('githulk.graphql', function () {
 
   describe('queries', function() {
     it('processes queries', function (next) {
-      githulk.graphql.get({ 
+      githulk.graphql.sendQuery({ 
         query: `
-          {
-            repository(owner:"githulks", name:"githulk") {  
-              packagejson: object(expression: "master:package.json") {
-                ... on Blob {
-                  text
-                }
-              }
-              commit: object(expression: "HEAD") {
-                ... on Commit {
-                  HEAD: abbreviatedOid
-                }
-              }
-            }
-            rateLimit {
-              limit
-              cost
-              remaining
-              resetAt
-            }
-          }`
+{
+  repository(owner:"githulks", name:"githulk") {  
+    packagejson: object(expression: "master:package.json") {
+      ... on Blob {
+        text
+      }
+    }
+    commit: object(expression: "HEAD") {
+      ... on Commit {
+        HEAD: abbreviatedOid
+      }
+    }
+  }
+}`
         },
         function (err, results) {
           if (err) return next(err);
 
           var data = results.data;
-
           var packageJson = require('../package.json');
 
           assume(JSON.parse(data.repository.packagejson.text).name).equals(packageJson.name);

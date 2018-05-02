@@ -9,7 +9,7 @@ var debug = require('diagnostics')('githulk:graphql');
  * @api private
  */
 function GraphQL(api) {
-  this.send = api.send.bind(api);
+  this.send = api.manaql.send.bind(api.manaql);
   this.api = api;
 }
 
@@ -21,20 +21,32 @@ function GraphQL(api) {
  * @returns {Assign}
  * @api public
  */
-GraphQL.prototype.get = function get(args) {
+GraphQL.prototype.sendQuery = function sendQuery(args) { 
   args = this.api.args(arguments);
   args.options = args.options || {};
 
+  var query = args.options.query || '{ \n }'; 
+ 
+  if(!~query.indexOf('rateLimit')) { 
+    var queryEnd = query.lastIndexOf('}'); 
+    var rateLimitFrag = '\n fragment rateLimit on Query { rateLimit { limit cost remaining resetAt } }'; 
+ 
+    query = query.slice(0, queryEnd) + '  ...rateLimit \n' + query.slice(queryEnd); 
+    query += rateLimitFrag; 
+  }
+
   args.options.method = 'POST';
-  args.options.params = { query: args.options.query || '' };
+  args.options.params = args.options.params || {}; 
+  args.options.params.query = query;
+  args.options.query = query;
 
   return this.send(
     ['graphql'], 
-    this.api.options(args.options), 
-    function handler(err, data) {
+    args.options, 
+    function handler(err, results) {
       if (err) return args.fn(err);
 
-      args.fn(null, data.length ? data[0] : null);
+      args.fn(null, results.length ? results[0] : null);
   });
 };
 
