@@ -8,24 +8,20 @@ describe('githulk.graphql', function () {
 
   describe('queries', function() {
     it('processes queries', function (next) {
+      var query = '{' +
+        'repository(owner:"githulks", name:"githulk") {' +
+          'packagejson: object(expression: "master:package.json") {' +
+            '... on Blob { text }' +
+          '}' +
+          'commit: object(expression: "HEAD") {' +
+            '... on Commit { HEAD: abbreviatedOid }' +
+          '}' +
+        '}' +
+      '}';
+
       githulk.graphql.sendQuery({ 
-        query: `
-{
-  repository(owner:"githulks", name:"githulk") {  
-    packagejson: object(expression: "master:package.json") {
-      ... on Blob {
-        text
-      }
-    }
-    commit: object(expression: "HEAD") {
-      ... on Commit {
-        HEAD: abbreviatedOid
-      }
-    }
-  }
-}`
-        },
-        function (err, results) {
+        query: query
+      }, function (err, results) {
           if (err) return next(err);
 
           var data = results.data;
