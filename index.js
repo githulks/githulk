@@ -87,6 +87,32 @@ mana.extend({
     if (options.cache) {
       this.cache = options.cache;
     }
+
+    //
+    // Make a second instance of mana for the v4 api
+    //
+    this.manaql = mana.extend({
+      initialise: function initialise(opts) {
+        this.api = opts.api;
+        this.authorization = opts.authorization;
+        this.cache = opts.cache;
+        this.tokens = opts.tokens;
+      }
+    }).new(Object.assign(options, {
+      api: this.api, 
+      authorization: this.authorization,
+      cache: this.cache,
+      tokens: this.tokens, 
+      isGraphql: true
+    }));
+
+    this.manaql.setRatelimitParser(function parseRatelimitFromBody(res, body, setRatelimit) {
+      if(body && body.data && body.data.rateLimit) { 
+        var limitData = body.data.rateLimit;
+    
+        setRatelimit(limitData.resetAt, limitData.limit, limitData.remaining);
+      }
+    });
   },
 
   /**
