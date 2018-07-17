@@ -14,7 +14,7 @@
   "author": "Arnout Kazemier",
   "license": "MIT",
   "dependencies": {
-    "diagnostics": "~1.1.0",
+    "diagnostics": "~1.1.1",
     "extract-github": "1.0.x",
     "mana": "^1.0.0",
     "unwrapper": "^1.1.0"
