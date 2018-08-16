@@ -56,7 +56,7 @@ to authorize the GitHulk instance you can provide it with:
 In addition to supplying your authorization details through the constructor of
 the function we also support them through `ENV` variables. Set the
 `GITHULK_TOKEN` or `GITHUB_TOKEN` variable with your oauth token and we will use
-that automaticaly.
+that automatically.
 
 ### Arguments
 
