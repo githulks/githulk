@@ -20,7 +20,7 @@
     "unwrapper": "^1.1.0"
   },
   "devDependencies": {
-    "assume": "^2.1.0",
+    "assume": "^2.2.0",
     "mocha": "^4.0.1",
     "pre-commit": "~1.2.0"
   }
