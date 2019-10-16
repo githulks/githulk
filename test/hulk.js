@@ -50,12 +50,14 @@ exports.webhooks = {
       active: true
     }
   },
+  // There are no more github service hooks, just regular webhooks
   jenkins: {
     repo: 'githulks/webhook-test',
+    type: 'web',
     options: {
-      name: 'jenkins',
+      name: 'web',
       config: {
-        jenkins_hook_url: 'https://my-fun-times/github_webhook/'
+        url: 'https://my-fun-times/github_webhook/'
       },
       events: ['push'],
       active: true

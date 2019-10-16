@@ -14,7 +14,7 @@ var hulk = require('./hulk')
       it('should create webhook for ' + type, function (next) {
         githulk.webhooks.create(hook.repo, hook.options, function (err, result) {
           assume(err).to.be.falsey();
-          assume(result.name).equals(type);
+          assume(result.name).equals(hook.type || type);
           next();
         });
       });
